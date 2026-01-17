@@ -40,7 +40,7 @@ class LLMRequest(Base):
             prompt="What is AI?",
             response="AI stands for Artificial Intelligence...",
             latency_ms=342.5,
-            metadata={"user_id": "user_123", "session": "abc"}
+            request_metadata={"user_id": "user_123", "session": "abc"}
         )
         
         # Save to database
@@ -117,7 +117,7 @@ class LLMRequest(Base):
     # ============================================
     # FLEXIBLE METADATA
     # ============================================
-    metadata = Column(
+    request_metadata = Column(
         JSON,
         nullable=True,
         comment="Additional context stored as JSON (e.g., user_id, session_id, tags)"
@@ -162,7 +162,7 @@ class LLMRequest(Base):
             "response": self.response,
             "latency_ms": self.latency_ms,
             "created_at": self.created_at.isoformat() if self.created_at else None,
-            "metadata": self.metadata
+            "metadata": self.request_metadata  # Expose as 'metadata' in API
         }
 
 
@@ -247,7 +247,7 @@ if __name__ == "__main__":
         response="Paris is the capital of France.",
         latency_ms=342.5,
         created_at=datetime.utcnow(),
-        metadata={
+        request_metadata={
             "user_id": "user_123",
             "session": "session_abc",
             "source": "web_interface"
